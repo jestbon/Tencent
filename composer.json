@@ -9,22 +9,11 @@
             "email": "277676978@qq.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {},
     "autoload": {
         "psr-4": {
-            "Eddie\\Tencent\\": "src"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Eddie\\Tencent\\Provider\\ImServiceProvider"
-            ],
-            "aliases": {
-                "TencentIm": "Eddie\\Tencent\\Facade\\Im"
-            }
+            "Eddie\\Tencent\\": "src/"
         }
     }
 }
