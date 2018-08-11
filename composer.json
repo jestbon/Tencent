@@ -1,0 +1,29 @@
+{
+    "name": "eddie/tencent",
+    "description": "Tencent-IM support in Laravel.",
+    "keywords": ["Laravel5", "腾讯IM"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eddie Lau",
+            "email": "277676978@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Eddie\\Tencent\\": "src"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eddie\\Tencent\\Provider\\ImServiceProvider"
+            ],
+            "aliases": {
+                "TencentIm": "Eddie\\Tencent\\Facade\\Im"
+            }
+        }
+    }
+}
