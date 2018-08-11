@@ -9,8 +9,10 @@
             "email": "277676978@qq.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {},
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.6"
+    },
     "autoload": {
         "psr-4": {
             "Eddie\\Tencent\\": "src/"
