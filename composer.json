@@ -1,7 +1,6 @@
 {
     "name": "eddie/tencent",
     "description": "Tencent-IM support in Laravel.",
-    "keywords": ["Laravel5", "腾讯IM"],
     "license": "MIT",
     "authors": [
         {
@@ -9,10 +8,8 @@
             "email": "277676978@qq.com"
         }
     ],
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=5.6"
-    },
+    "minimum-stability": "dev",
+    "require": {},
     "autoload": {
         "psr-4": {
             "Eddie\\Tencent\\": "src/"
