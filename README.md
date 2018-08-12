@@ -12,8 +12,16 @@
 + 命令行执行
 
 ```shell
-$ composer require eddie/tencent --dev
+$ composer require eddie/tencent
 ```
+或 在composer.json 添加 
+
+```json
+"eddie/tencent": "1.0"
+```
+
+运行 ```composer update```
+
 
 + Laravel 5.5使用包自动发现，所以不需要手动添加ServiceProvider; 版本小于Laravel 5.5需在 `config/app.php` 中注册服务提供者:
 

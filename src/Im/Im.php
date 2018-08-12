@@ -10,7 +10,7 @@ class Im
 
     protected $message;
 
-    public function __construct($config)
+    public function __construct()
     {
         //
     }
