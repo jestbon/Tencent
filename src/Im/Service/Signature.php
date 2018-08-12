@@ -27,11 +27,6 @@ class Signature extends AbstractService
      */
     public function generate($identifier, $expired = 180 * 24 * 3600)
     {
-        /*
-         * TODO ...
-         */
-        echo '签名生成';
-
         $json = [
             'TLS.account_type' => '0',
             'TLS.identifier' => (string) $identifier,
@@ -68,11 +63,6 @@ class Signature extends AbstractService
      */
     public function verify($sign, $identifier)
     {
-        /*
-         * TODO ...
-         */
-        echo '签名校验';
-
         try {
             $error_msg = '';
             $decoded_sig = $this->base64Decode($sign);
