@@ -9,6 +9,18 @@ class Message extends AbstractService
     const CALLBACK_BEFORE = 'C2C.CallbackBeforeSendMsg';
     const CALLBACK_AFTER  = 'C2C.CallbackAfterSendMsg';
 
+    /*
+     * 错误码，0为回调成功；1为回调出错。
+     */
+    const CALLBACK_SUCCESS_CODE = 0;
+    const CALLBACK_FAIL_CODE    = 1;
+
+    /*
+     * 请求处理的结果，OK表示处理成功，FAIL表示失败。
+     */
+    const CALLBACK_SUCCESS_STATUS = 'OK';
+    const CALLBACK_FAIL_STATUS    = 'FAIL';
+
     protected $service = 'openim';
 
     private $fromAccount;
@@ -22,22 +34,50 @@ class Message extends AbstractService
 
     private $msgBody = [];
 
+    private $offlinePushInfo = [];
+
 
     public function __construct()
     {
 
     }
 
-    public function send($identifier)
+    /**
+     * 发送消息
+     *
+     * @author Eddie
+     *
+     * @param $identifier
+     * @param array $opt
+     * @return array|mixed
+     */
+    public function send($identifier, array $opt = [])
     {
-        /*
-         * TODO ...
-         */
-        $data = [];
+        $allowOptKeys = [
+            'SyncOtherMachine',
+            'From_Account',
+            'MsgLifeTime'
+        ];
+        foreach ($opt as $k => $v) {
+            if (!in_array($k, $allowOptKeys)) unset($opt[$k]);
+            if (empty($v)) unset($opt[$k]);
+        }
 
-        echo "消息发送[to:$identifier]";
+        // build post-data
+        $data = array_merge($opt, [
+            'To_Account' => $identifier,
+            'MsgRandom'  => self::makeMsgRandom(),
+            'MsgTimeStamp' => self::getTimestamp(),
+            'MsgBody' => $this->msgBody
+        ], ['OfflinePushInfo' => $this->offlinePushInfo]);
 
-        $res = self::postRequest($this->getUrl('sendmsg'), $data);
+        try {
+            $result = self::postRequest($this->getUrl('sendmsg'), $data);
+            return json_decode($result, true);
+        } catch (\Exception $e) {
+            return self::makeFailResponse($e->getMessage());
+        }
+
     }
 
     /**
@@ -105,6 +145,24 @@ class Message extends AbstractService
         return $this;
     }
 
+    /**
+     * 离线推送信息配置, 具体可参考"消息格式描述"(https://cloud.tencent.com/document/product/269/2720#.E7.A6.BB.E7.BA.BF.E6.8E.A8.E9.80.81-offlinepushinfo-.E8.AF.B4.E6.98.8E)
+     *
+     * @author Eddie
+     *
+     * @param array $info
+     * @return $this
+     */
+    public function setOfflinePush(array $info = [])
+    {
+        /*
+         * TODO : ...
+         */
+        //$this->offlinePushInfo = $info;
+
+        return $this;
+    }
+
 
     public function __call($name, $args)
     {
@@ -131,6 +189,15 @@ class Message extends AbstractService
         }
     }
 
+
+    /**
+     * 处理发送消息之前回调
+     *
+     * @author Eddie
+     *
+     * @param \Closure $callback
+     * @return $this
+     */
     public function handleCallbackBeforeSend(\Closure $callback)
     {
         if ($this->callbackBefore) {
@@ -139,6 +206,14 @@ class Message extends AbstractService
         return $this;
     }
 
+    /**
+     * 处理发送消息之后回调
+     *
+     * @author Eddie
+     *
+     * @param \Closure $callback
+     * @return $this
+     */
     public function handleCallbackAfterSend(\Closure $callback)
     {
         if ($this->callbackAfter) {
@@ -147,4 +222,48 @@ class Message extends AbstractService
         return $this;
     }
 
+
+    /**
+     * 生成回调成功应答包
+     *
+     * @author Eddie
+     *
+     * @return array
+     */
+    public static function makeSuccessResponse()
+    {
+        return self::makeCallbackResponse(self::CALLBACK_SUCCESS_STATUS, self::CALLBACK_SUCCESS_CODE);
+    }
+
+    /**
+     * 生成回调失败应答包
+     *
+     * @author Eddie
+     *
+     * @param string $errMsg
+     * @return array
+     */
+    public function makeFailResponse(string $errMsg)
+    {
+        return self::makeCallbackResponse(self::CALLBACK_FAIL_STATUS, self::CALLBACK_FAIL_CODE, $errMsg);
+    }
+
+    /**
+     * 生成回调应答包
+     *
+     * @author Eddie
+     *
+     * @param string $status
+     * @param int $errCode
+     * @param string $errMsg
+     * @return array
+     */
+    public static function makeCallbackResponse(string $status, int $errCode, $errMsg ='')
+    {
+        return [
+            'ActionStatus' => in_array($status, [self::CALLBACK_SUCCESS_STATUS, self::CALLBACK_FAIL_STATUS]) ? $status : self::CALLBACK_STATUS_SUCCESS,
+            'ErrorCode' => in_array($errCode, [self::CALLBACK_SUCCESS_CODE, self::CALLBACK_FAIL_CODE]) ? $errCode : self::CALLBACK_SUCCESS_CODE,
+            'ErrorInfo' => $errMsg
+        ];
+    }
 }

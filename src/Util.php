@@ -105,4 +105,29 @@ trait Util
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $str))));
     }
 
+    /**
+     * 生成随机数
+     *
+     * @author Eddie
+     *
+     * @return int
+     */
+    public static function makeMsgRandom ()
+    {
+        return mt_rand(100000, 999999);
+    }
+
+    /**
+     * 返回当前时间戳
+     *
+     * @author Eddie
+     *
+     * @return int
+     */
+    public static function getTimestamp()
+    {
+        date_default_timezone_set(env('APP_TIMEZONE', 'PRC'));
+        return time();
+    }
+
 }
