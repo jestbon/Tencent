@@ -134,7 +134,7 @@ class Message extends AbstractService
     public function handleCallbackBeforeSend(\Closure $callback)
     {
         if ($this->callbackBefore) {
-            $callback();
+            $callback($this);
         }
         return $this;
     }
@@ -142,7 +142,7 @@ class Message extends AbstractService
     public function handleCallbackAfterSend(\Closure $callback)
     {
         if ($this->callbackAfter) {
-            $callback();
+            $callback($this);
         }
         return $this;
     }
