@@ -22,6 +22,16 @@
             "Eddie\\Tencent\\Test\\": "tests/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eddie\\Tencent\\Provider\\ImServiceProvider"
+            ],
+            "aliases": {
+                "TencentIm": "Eddie\\Tencent\\Facade\\Im"
+            }
+        }
+    },
     "require-dev": {
         "laravel/laravel": "5.*",
         "phpunit/phpunit": "^7.3@dev"
