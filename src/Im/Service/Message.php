@@ -122,13 +122,29 @@ class Message extends AbstractService
             switch ($name) {
                 case 'is_callback':
                 case 'isCallback':
-                case 'callback':
+                //case 'callback':
                     return $this->callbackBefore || $this->callbackAfter;
 
                 default:
                     return null;
             }
         }
+    }
+
+    public function handleCallbackBeforeSend(\Closure $callback)
+    {
+        if ($this->callbackBefore) {
+            $callback();
+        }
+        return $this;
+    }
+
+    public function handleCallbackAfterSend(\Closure $callback)
+    {
+        if ($this->callbackAfter) {
+            $callback();
+        }
+        return $this;
     }
 
 }
