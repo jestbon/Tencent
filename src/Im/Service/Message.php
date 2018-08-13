@@ -175,7 +175,11 @@ class Message extends AbstractService
     public function __get($name)
     {
         if (property_exists($this, $name)) {
+            if ($name == 'msgBody') {
+                if (count($this->msgBody) === 1) return $this->msgBody[0];
+            }
             return $this->$name;
+
         } else {
             switch ($name) {
                 case 'is_callback':

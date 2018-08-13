@@ -43,17 +43,32 @@ class MessageBag
         ];
     }
 
-    public function __get($name)
+    private function isType($type)
     {
-        $attr = strtolower($name);
-        return $this->entity->$attr;
+        return array_flip($this->mapping)[get_class($this->entity)] === ('TIM' . substr($type, 2) . 'Elem');
     }
 
-    public function __call($name, $args)
+    public function __get($name)
     {
-        $attr = strtolower($name);
-        if (isset($this->msgContent[$attr])) {
-            $this->msgContent[$attr] = $args[0];
+        if (in_array($name, ['isCustom', 'isText', 'isLocation', 'isFace'])) {
+            /// 是否为指定类型消息(如: 自定义消息, 文本消息, 位置消息, 表情消息), 返回值: "true" OR "false"
+            return $this->isType($name);
+        } else {
+            $attr = strtolower($name);
+            return $this->entity->$attr;
+        }
+    }
+
+    public function __call($name, array $args)
+    {
+        if ( method_exists($this, $name)) {
+            call_user_func_array([$this, $name], $args);
+        } else {
+            // 设置 消息entity 属性值
+            $attr = strtolower($name);
+            if (isset($this->msgContent[$attr])) {
+                $this->msgContent[$attr] = $args[0];
+            }
         }
         return $this;
     }
