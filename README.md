@@ -17,7 +17,7 @@ $ composer require eddie/tencent
 或 在composer.json 添加 
 
 ```json
-"eddie/tencent": "1.0"
+"eddie/tencent": "dev-master"
 ```
 
 运行 ```composer update```
