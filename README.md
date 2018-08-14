@@ -14,7 +14,14 @@
 ```shell
 $ composer require eddie/tencent
 ```
-或 在composer.json文件 `require` 中添加 
+
+若安装出现
+```shell
+[InvalidArgumentException]
+Could not find a version of package eddie/tencent matching your minimum-stability (dev). Require it with an explicit version constraint allowing its desired stability.
+```
+
+可以在composer.json文件 `require` 中添加 
 
 ```json
 {
@@ -23,29 +30,47 @@ $ composer require eddie/tencent
   }
 }
 ```
+并添加 `repositories` 镜像源
+```json
+"repositories": {
+    "tencent-im": {
+        "type": "vcs",
+        "url": "https://github.com/EddieLau0402/Tencent.git"
+    }
+},
+```
 
 运行 ```composer update```
 
 
-+ Laravel 5.5使用包自动发现，所以不需要手动添加ServiceProvider; 版本小于Laravel 5.5需在 `config/app.php` 中注册服务提供者:
 
-```php
-'providers' => [
-    ...
++ 添加注册
+    - Laravel
+            * Laravel 5.5使用包自动发现，所以不需要手动添加ServiceProvider; 版本小于Laravel 5.5需在 `config/app.php` 中注册服务提供者:
     
-    Eddie\Tencent\Provider\ImServiceProvider::class,
+            ```php
+            'providers' => [
+                ...
+                
+                Eddie\Tencent\Provider\ImServiceProvider::class,
+                
+                ...
+            ]
+            
+            'aliases' => [
+                ...
+                
+                'TencentIm' => Eddie\Tencent\Facade\Im::class,
+                
+                ...
+            ]
+            ```
     
-    ...
-]
-
-'aliases' => [
-    ...
-    
-    'TencentIm' => Eddie\Tencent\Facade\Im::class,
-    
-    ...
-]
-```
+    - Lumen
+        * 在 `bootstrap/app.php` 中添加
+        ```php
+        $app->register(\Eddie\Tencent\Provider\ImServiceProvider::class);
+        ```
 
 
 
