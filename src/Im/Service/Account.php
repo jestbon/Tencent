@@ -36,22 +36,32 @@ class Account extends AbstractService
      *
      * @param $identifier
      */
-//    public function create($identifier = null, $nickname = null, $faceUrl = null, $type = 0)
-//    {
-//        $identifier && $this->identifier = $identifier;
-//        $nickname && $this->nickname = $nickname;
-//        $faceUrl && $this->faceUrl = $faceUrl;
-//        $type == 1 && $this->type = 1;
-//
-//        $data = $this->transfor();
-//
-//        /*
-//         * TODO ...
-//         */
-//        echo "独立模式账号导入[user: ".json_encode($data)."]";
-//
-//        $res = $this->postRequest($this->getUrl('account_import'), $data);
-//    }
+    public function save()
+    {
+        $data = [
+            'Identifier' => $this->attrs['identifier'],
+            'Nick'       => $this->attrs['nick'],
+            'FaceUrl'    => $this->attrs['faceUrl'],
+            'Type'       => $this->attrs['type']
+        ];
+        $data = array_filter($data);
+
+        $url = $this->getUrl('account_import') . '?' . http_build_query([
+                'usersig' => $this->sig,
+                'identifier' => config('im.identifier'),
+                'sdkappid' => config('im.appid'),
+                'random' => Util::makeMsgRandom(),
+                'contenttype' => 'json'
+            ]);
+        //dd(['url' => $url, 'data' => $data]);
+
+        try {
+            $result = Util::postRequest($url, json_encode($data));
+            return json_decode($result, true);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
 
     /**
      * 独立模式帐号批量导入接口
@@ -67,16 +77,6 @@ class Account extends AbstractService
         echo '独立模式帐号批量导入';
 
         $res = $this->postRequest($this->getUrl('multiaccount_import'), $data);
-    }
-
-    private function transfor()
-    {
-        return [
-            'Identifier' => $this->identifier,
-            'Nick' => $this->nickname,
-            'FaceUrl' => $this->faceUrl,
-            'Type' => $this->type
-        ];
     }
 
 
@@ -97,37 +97,6 @@ class Account extends AbstractService
             return $this->attrs[$name];
         }
         return null;
-    }
-
-    public function save()
-    {
-        $data = [
-            'Identifier' => $this->attrs['identifier'],
-            'Nick'       => $this->attrs['nick'],
-            'FaceUrl'    => $this->attrs['faceUrl'],
-            'Type'       => $this->attrs['type']
-        ];
-        $data = array_filter($data);
-        //dd([$this->getUrl('account_import'), $data]);
-
-        /*
-         * https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig=xxx&identifier=admin&sdkappid=88888888&random=99999999&contenttype=json
-         */
-        $url = $this->getUrl('account_import') . '?' . http_build_query([
-            'usersig' => $this->sig,
-            'identifier' => config('im.identifier'),
-            'sdkappid' => config('im.appid'),
-            'random' => Util::makeMsgRandom(),
-            'contenttype' => 'json'
-        ]);
-        //dd(['url' => $url, 'data' => $data]);
-
-        try {
-            $result = Util::postRequest($url, json_encode($data));
-            return json_decode($result, true);
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
     }
 
     public function setRobot()
