@@ -34,6 +34,8 @@ class Message extends AbstractService
 
     private $msgBody = [];
 
+    private $msgTime;
+
     private $offlinePushInfo = [];
 
 

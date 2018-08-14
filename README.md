@@ -128,7 +128,7 @@ $message->toAccount; // 消息接收方帐号
 $message->isCallback; // 或 "$message->is_callback", 是否IM回调, 返回"true"、"false"
 $message->callbackBefore; // 是否发送消息之前回调, 返回"true"、"false"
 $message->callbackAfter; // 是否发送消息之后回调, 返回"true"、"false"
-
+$message->msgTime; // 消息时间戳，unix 时间戳。
 $message->msgBody; // 消息内容
 $message->msgBody->text; // 文本消息 - 消息内容
 $message->msgBody->data; // 自定义消息 - 自定义消息数据
@@ -139,4 +139,11 @@ $message->msgBody->ext; // 自定义消息 - 扩展字段
  *     详细参考腾讯IM [消息格式描述](https://cloud.tencent.com/doc/product/269/%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F%E6%8F%8F%E8%BF%B0)
  *     属性名 以 IM消息格式中所定义的字段名的小驼峰命名
  */
+
+$message->handleCallbackBeforeSend(function ($message) { // 处理发送消息之前回调
+    // ...
+})
+$message->handleCallbackAfterSend(function ($message) { // 处理发送消息之后回调
+    // ...
+})
 ```
