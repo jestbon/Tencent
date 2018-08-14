@@ -147,3 +147,14 @@ IM_PUBLIC_KEY=/your_public_key_path/public_key
         // ...
     })
     ```
+    
+3. 账号 `account`
+    ```php
+    $account = TencentIm::account(['sig' => $sig]); // 必须传入主账号签名 "sig"
+    $account->identifier('demo')                    // 用户名, 必填
+        ->faceUrl('http://xxxx/avatar.png')         // 用户头像URL
+        ->nick('Jack')                              // 用户昵称
+        ->setRobot()                                // 设置帐号类型; 值: 0->表示普通帐号, 1->表示机器人帐号
+        ->save()                                    // 保存用户信息, 提交到IM
+    ;
+    ```

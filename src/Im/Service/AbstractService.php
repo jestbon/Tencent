@@ -5,8 +5,6 @@ use Eddie\Tencent\Util;
 
 abstract class AbstractService
 {
-    use Util;
-
     protected $service;
 
     public function getUrl($cmd)

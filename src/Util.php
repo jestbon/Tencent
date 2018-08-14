@@ -9,7 +9,7 @@
 namespace Eddie\Tencent;
 
 
-trait Util
+class Util
 {
     /**
      * POST请求
@@ -65,6 +65,14 @@ trait Util
             }
         }
         else { // >>>>> POST request.
+            if (is_array($params)) {
+                $params = http_build_query($params);
+            } else {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($params)
+                ));
+            }
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         }

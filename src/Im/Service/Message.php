@@ -3,6 +3,7 @@
 namespace Eddie\Tencent\Im\Service;
 
 use Eddie\Tencent\Im\MessageBag;
+use Eddie\Tencent\Util;
 
 class Message extends AbstractService
 {
@@ -68,13 +69,13 @@ class Message extends AbstractService
         // build post-data
         $data = array_merge($opt, [
             'To_Account' => $identifier,
-            'MsgRandom'  => self::makeMsgRandom(),
-            'MsgTimeStamp' => self::getTimestamp(),
+            'MsgRandom'  => Util::makeMsgRandom(),
+            'MsgTimeStamp' => Util::getTimestamp(),
             'MsgBody' => $this->msgBody
         ], ['OfflinePushInfo' => $this->offlinePushInfo]);
 
         try {
-            $result = self::postRequest($this->getUrl('sendmsg'), $data);
+            $result = Util::postRequest($this->getUrl('sendmsg'), $data);
             return json_decode($result, true);
         } catch (\Exception $e) {
             return self::makeFailResponse($e->getMessage());
@@ -109,7 +110,7 @@ class Message extends AbstractService
                     break;
 
                 default:
-                    $attribute = self::convertToCamel($attr);
+                    $attribute = Util::convertToCamel($attr);
                     if (property_exists($this, $attribute)) {
                         $this->$attribute = $val;
                     }
