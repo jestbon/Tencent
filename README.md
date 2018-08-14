@@ -14,10 +14,14 @@
 ```shell
 $ composer require eddie/tencent
 ```
-或 在composer.json 添加 
+或 在composer.json文件 `require` 中添加 
 
 ```json
-"eddie/tencent": "dev-master"
+{
+  "require": {
+    "eddie/tencent": "dev-master"
+  }
+}
 ```
 
 运行 ```composer update```
