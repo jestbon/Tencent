@@ -17,18 +17,9 @@ class Account extends AbstractService
         'type'       => 0   // 帐号类型，开发者默认无需填写，值0表示普通帐号，1表示机器人帐号
     ];
 
-    private $sig;
-
     function __construct()
     {
-        $args = func_get_args();
-        if ($args) {
-            if (isset($args[0]['sig'])) {
-                $this->sig = $args[0]['sig'];
-                return $this;
-            }
-        }
-        throw new \Exception('paramater "sig" is required.');
+        //
     }
 
     /**
@@ -53,7 +44,6 @@ class Account extends AbstractService
                 'random' => Util::makeMsgRandom(),
                 'contenttype' => 'json'
             ]);
-        //dd(['url' => $url, 'data' => $data]);
 
         try {
             $result = Util::postRequest($url, json_encode($data));
