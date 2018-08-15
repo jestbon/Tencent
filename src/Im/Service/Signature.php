@@ -13,9 +13,9 @@ if (!extension_loaded('openssl')) {
 if (!in_array('sha256', openssl_get_md_methods(), true)) {
     trigger_error('need openssl support sha256', E_USER_ERROR);
 }
-if (version_compare(PHP_VERSION, '7.1.0') >= 0 && !in_array('secp256k1', openssl_get_curve_names(), true)) {
-    trigger_error('not support secp256k1', E_USER_NOTICE);
-}
+//if (version_compare(PHP_VERSION, '7.1.0') >= 0 && !in_array('secp256k1', openssl_get_curve_names(), true)) {
+//    trigger_error('not support secp256k1', E_USER_NOTICE);
+//}
 
 class Signature extends AbstractService
 {
