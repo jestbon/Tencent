@@ -38,7 +38,7 @@ class Account extends AbstractService
         $data = array_filter($data);
 
         $url = $this->getUrl('account_import') . '?' . http_build_query([
-                'usersig' => $this->sig,
+                'usersig' => (new Signature())->generate(config('im.identifier')), // 主账号签名
                 'identifier' => config('im.identifier'),
                 'sdkappid' => config('im.appid'),
                 'random' => Util::makeMsgRandom(),
